@@ -13,10 +13,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mokelab.lesson.sakammotonew.navigation.Routes
+import com.mokelab.lesson.sakammotonew.screen.AppBlockScreen
 import com.mokelab.lesson.sakammotonew.screen.CounterScreen
 import com.mokelab.lesson.sakammotonew.screen.HomeScreen
 import com.mokelab.lesson.sakammotonew.screen.LoginScreen
 import com.mokelab.lesson.sakammotonew.screen.TimerScreen
+import com.mokelab.lesson.sakammotonew.viewmodel.AppBlockViewModel
 import com.mokelab.lesson.sakammotonew.viewmodel.CounterViewModel
 import com.mokelab.lesson.sakammotonew.viewmodel.LoginViewModel
 import com.mokelab.lesson.sakammotonew.viewmodel.TimerViewModel
@@ -51,11 +53,19 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 onGoCounter = { navController.navigate(Routes.COUNTER) },
                                 onGoTimer = { navController.navigate(Routes.TIMER) },
+                                onGoAppBlock = { navController.navigate(Routes.APP_BLOCK) },
                                 onLogout = {
                                     navController.navigate(Routes.LOGIN) {
                                         popUpTo(Routes.HOME) { inclusive = true }
                                     }
                                 }
+                            )
+                        }
+                        composable(Routes.APP_BLOCK) {
+                            val viewModel: AppBlockViewModel = viewModel()
+                            AppBlockScreen(
+                                viewModel = viewModel,
+                                onBack = { navController.popBackStack() }
                             )
                         }
                         composable(Routes.COUNTER) {

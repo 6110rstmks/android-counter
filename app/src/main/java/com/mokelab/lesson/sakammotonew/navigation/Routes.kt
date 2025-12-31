@@ -5,4 +5,5 @@ object Routes {
     const val HOME = "home"
     const val COUNTER = "counter"
     const val TIMER = "timer"
+    const val APP_BLOCK = "app_block"
 }

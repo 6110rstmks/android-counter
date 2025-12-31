@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onGoCounter: () -> Unit,
     onGoTimer: () -> Unit,
+    onGoAppBlock: () -> Unit,
     onLogout: () -> Unit
 ) {
     Column(
@@ -38,6 +39,15 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("タイマー画面へ")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onGoAppBlock,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("アプリブロック設定へ")
         }
 
         Spacer(modifier = Modifier.height(48.dp))

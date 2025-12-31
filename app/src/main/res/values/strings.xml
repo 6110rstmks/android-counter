@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sakammotonew</string>
+    <string name="accessibility_description">特定のアプリへのアクセスを制限するために使用します。</string>
 </resources>

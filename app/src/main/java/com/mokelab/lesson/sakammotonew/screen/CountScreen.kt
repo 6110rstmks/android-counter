@@ -18,15 +18,15 @@ fun CounterScreen(
     val count by viewModel.count.collectAsState(initial = 0)
 
     // ダイアログ表示
-    var showDialog by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
 
-    if (showDialog) {
+    if (showDialog.value) {
         AlertDialog(
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = { showDialog.value = false },
             title = { Text("注意") },
             text = { Text("マイナスにはできません") },
             confirmButton = {
-                TextButton(onClick = { showDialog = false }) { Text("OK") }
+                TextButton(onClick = { showDialog.value = false }) { Text("OK") }
             }
         )
     }
@@ -45,7 +45,7 @@ fun CounterScreen(
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(onClick = {
-                viewModel.decrement(onBelowZero = { showDialog = true })
+                viewModel.decrement(onBelowZero = { showDialog.value = true })
             }) { Text("-") }
 
             Button(onClick = { viewModel.reset() }) { Text("Reset") }
