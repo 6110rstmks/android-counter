@@ -8,18 +8,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mokelab.lesson.sakammotonew.navigation.Routes
 import com.mokelab.lesson.sakammotonew.screen.CounterScreen
+import com.mokelab.lesson.sakammotonew.screen.HomeScreen
+import com.mokelab.lesson.sakammotonew.screen.LoginScreen
 import com.mokelab.lesson.sakammotonew.screen.TimerScreen
+import com.mokelab.lesson.sakammotonew.viewmodel.CounterViewModel
+import com.mokelab.lesson.sakammotonew.viewmodel.LoginViewModel
+import com.mokelab.lesson.sakammotonew.viewmodel.TimerViewModel
 import com.mokelab.lesson.sakammotonew.ui.theme.SakammotonewTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             SakammotonewTheme {
                 val navController = rememberNavController()
@@ -27,16 +33,43 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "counter",
+                        startDestination = Routes.LOGIN,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable("counter") {
-                            CounterScreen(
-                                onGoTimer = { navController.navigate("timer") }
+                        composable(Routes.LOGIN) {
+                            val viewModel: LoginViewModel = viewModel()
+                            LoginScreen(
+                                viewModel = viewModel,
+                                onLoginSuccess = {
+                                    navController.navigate(Routes.HOME) {
+                                        popUpTo(Routes.LOGIN) { inclusive = true }
+                                    }
+                                }
                             )
                         }
-                        composable("timer") {
+                        composable(Routes.HOME) {
+                            HomeScreen(
+                                onGoCounter = { navController.navigate(Routes.COUNTER) },
+                                onGoTimer = { navController.navigate(Routes.TIMER) },
+                                onLogout = {
+                                    navController.navigate(Routes.LOGIN) {
+                                        popUpTo(Routes.HOME) { inclusive = true }
+                                    }
+                                }
+                            )
+                        }
+                        composable(Routes.COUNTER) {
+                            val viewModel: CounterViewModel = viewModel()
+                            CounterScreen(
+                                viewModel = viewModel,
+                                onGoTimer = { navController.navigate(Routes.TIMER) },
+                                onBack = { navController.popBackStack() }
+                            )
+                        }
+                        composable(Routes.TIMER) {
+                            val viewModel: TimerViewModel = viewModel()
                             TimerScreen(
+                                viewModel = viewModel,
                                 onBack = { navController.popBackStack() }
                             )
                         }

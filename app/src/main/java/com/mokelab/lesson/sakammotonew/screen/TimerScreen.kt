@@ -6,31 +6,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
+import com.mokelab.lesson.sakammotonew.viewmodel.TimerViewModel
 
 @Composable
 fun TimerScreen(
-    modifier: Modifier = Modifier,
+    viewModel: TimerViewModel,
     onBack: () -> Unit
 ) {
-    var seconds by remember { mutableStateOf(0) }
-    var running by remember { mutableStateOf(false) }
-
-    // running が true の間だけ 1秒ごとに加算
-    LaunchedEffect(running) {
-        while (running) {
-            delay(1000)
-            seconds += 1
-        }
-    }
+    val seconds = viewModel.seconds
+    val running = viewModel.running
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        @Suppress("DEPRECATION")
         Text(
             text = "Timer: ${seconds}s",
             style = MaterialTheme.typography.headlineMedium
@@ -40,22 +33,22 @@ fun TimerScreen(
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(
-                onClick = { running = true },
+                onClick = { viewModel.start() },
                 enabled = !running
             ) { Text("Start") }
 
             Button(
-                onClick = { running = false },
+                onClick = { viewModel.stop() },
                 enabled = running
             ) { Text("Stop") }
 
-            Button(onClick = { seconds = 0 }) { Text("Reset") }
+            Button(onClick = { viewModel.reset() }) { Text("Reset") }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedButton(onClick = onBack) {
-            Text("戻る")
+        OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            Text("ホームへ戻る")
         }
     }
 }
